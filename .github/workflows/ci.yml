@@ -79,9 +79,7 @@ jobs:
             git fetch --all
             git reset --hard origin/main
             # Stop and remove existing containers
-            docker compose down
-
-            docker compose up -d --build
+            docker compose up -d --build --force-recreate
 
             docker image prune -f
 
