@@ -66,25 +66,24 @@ jobs:
         env:
           EC2_KEY: ${{ secrets.EC2_KEY }}
 
-      - name: Deploy on EC2
+      - name: Deploy on EC2 (git pull + docker compose up -d --build)
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
         run: |
-          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << 'EOF'
+          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
             set -e
             cd "${EC2_APP_DIR}"
-            
+
             git fetch --all
             git reset --hard origin/main
-            
-            # Stop and remove ALL containers defined in docker-compose.yml
-            docker compose down
-            
-            # Build and start fresh containers
-            docker compose up -d --build
-            
+            # Stop and remove existing containers
+            docker compose down -v
+
+            docker compose up -d --build 
+
             docker image prune -f
+
             docker compose ps
           EOF
