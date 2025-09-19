@@ -1,6 +1,5 @@
 {
   "name": "task-app-server",
-  "type": "module",
   "version": "1.0.0",
   "description": "Simple task app backend for DevOps demo",
   "main": "server.js",
