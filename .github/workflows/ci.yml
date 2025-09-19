@@ -79,13 +79,13 @@ jobs:
             git fetch --all
             git reset --hard origin/main
             # Stop and remove existing containers
-            docker stop $(docker ps -aq) 2>/dev/null || true
-            docker rm $(docker ps -aq) 2>/dev/null || true
-            docker compose down -v
+            # docker stop $(docker ps -aq) 2>/dev/null || true
+            # docker rm $(docker ps -aq) 2>/dev/null || true
+            # docker compose down -v
 
-            docker compose up -d --build 
+            # docker compose up -d --build 
 
-            docker image prune -f
+            # docker image prune -f
 
             docker compose ps
           EOF
