@@ -4,7 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 // const taskRoutes = require('./routes/tasks');
 
-// Load environment variables
+// Load environment variadbles
 dotenv.config();
 
 const app = express();
