@@ -78,6 +78,8 @@ jobs:
 
             git fetch --all
             git reset --hard origin/main
+            # Stop and remove existing containers
+            docker compose down
 
             docker compose up -d --build
 
