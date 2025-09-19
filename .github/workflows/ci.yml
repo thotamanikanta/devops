@@ -74,7 +74,7 @@ jobs:
           EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
         run: |
           # Use -t flag for pseudo-terminal and -o StrictHostKeyChecking=no
-          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST}
             set -e
             cd "${EC2_APP_DIR}"
             
@@ -84,4 +84,3 @@ jobs:
             docker compose up -d --build
             docker image prune -f
             docker compose ps
-          EOF
