@@ -49,7 +49,7 @@ jobs:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (optional)
         uses: actions/checkout@v4
 
       - name: Add EC2 host to known_hosts
@@ -59,28 +59,29 @@ jobs:
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
 
-      - name: Write SSH key with proper formatting
+      - name: Write SSH key
         run: |
-          # Clean way to write the key without extra characters
-          echo "$EC2_KEY" | tr -d '\r' > ec2_key.pem
+          echo "${EC2_KEY}" > ec2_key.pem
           chmod 600 ec2_key.pem
         env:
           EC2_KEY: ${{ secrets.EC2_KEY }}
 
-      - name: Deploy on EC2
+      - name: Deploy on EC2 (git pull + docker compose up -d --build)
         env:
           EC2_HOST: ${{ secrets.EC2_HOST }}
           EC2_USER: ${{ secrets.EC2_USER }}
           EC2_APP_DIR: ${{ secrets.EC2_APP_DIR }}
         run: |
-          # Use -t flag for pseudo-terminal and -o StrictHostKeyChecking=no
-          ssh -o StrictHostKeyChecking=no -i ec2_key.pem ${EC2_USER}@${EC2_HOST}
+          ssh -i ec2_key.pem ${EC2_USER}@${EC2_HOST} << EOF
             set -e
             cd "${EC2_APP_DIR}"
-            
+
             git fetch --all
             git reset --hard origin/main
-            
+
             docker compose up -d --build
+
             docker image prune -f
+
             docker compose ps
+          EOF
