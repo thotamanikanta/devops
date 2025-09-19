@@ -47,6 +47,6 @@ app.post('/echo', (req, res) => {
 //   process.exit(0);
 // });
 
-app.listen(PORT, () => {
-  console.log(`"Server is running on" ${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server is running on port ${PORT}`);
 });
